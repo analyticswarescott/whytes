@@ -1,0 +1,5 @@
+[
+  {"lastStartTimeUTC":0,"lastShutdownTimeUTC":0,"statusType":"Active","tableId":10000},
+  {"lastStartTimeUTC":0,"lastShutdownTimeUTC":0,"statusType":"Inactive","tableId":10001},
+  {"lastStartTimeUTC":0,"lastShutdownTimeUTC":0,"statusType":"Unknown","tableId":10002}
+]

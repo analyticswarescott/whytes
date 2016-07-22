@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AnalyticsWare -- NexGen Data Exploration</title>
+
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="css/dc.css"/>
+    <link rel="icon" type="image/x-icon" href="dc.logo.png"/>
+
+</head>
+
+<style type="text/css">
+    html, body { background: #f7f7f7; height: 100%; margin: 0; padding: 0; color: #111; font-family: Ubuntu, Helvetica, sans-serif;  line-height: 1.35em;}
+    a { color: #6be; text-decoration: none; }
+    .row, .header, .cell { height: 18px; }
+    .row, .header { clear: left; }
+    .data {
+        position: relative;
+        left: 15px;
+    }
+    .header { font-weight: bold; height: 0px;}
+    .cell {
+        border: solid; border-width: 1px;
+        font-size: 10px; padding-right: 2px;
+        text-align: right; float: left; overflow: hidden; white-space: nowrap;  width: 38.5px; }
+    .col-0 { width: 57px; }
+  /*  .col-0.cell {padding-left: 10px;}*/
+</style>
+
+<body style="background-color: whitesmoke;">
+<div style=" height: 50px; padding-left: 10px; padding-top: 10px; background-color: black; color: white" ><H5> Example - Whyte's Sales Analysis</H5></div>
+
+<div style=" background-color: lightblue; padding-left: 10px;  padding-top: 2px; padding-bottom: 2px; top: 10px; left: 10px;" > Division:
+    <select style=" vertical-align: top;">
+    <option value="RT">RT</option>
+    <option value="FS">FS</option>
+    <option value="MG">MG</option>
+    <option value="XX">XX</option>
+</select>
+    &nbsp;
+    Year:
+    <select style=" vertical-align: top;">
+        <option value="2015">2015</option>
+        <option value="2014">2014</option>
+    </select>
+    &nbsp;
+    Metric:
+    <select style=" vertical-align: top;">
+        <option value="Gross Sales">Gross Sales</option>
+        <option value="Gross Margin">Gross Margin</option>
+        <option value="Net Sales">Net Sales</option>
+    </select>
+
+</div>
+
+
+<!--1st row-->
+
+<div class="grid-stack" style="top: 10px; left: 10px;">
+    <div id="m"  class="grid-stack-item"
+         data-gs-x="0" data-gs-y="0"
+         data-gs-width="4" data-gs-height="4">
+        <div style="padding-left:  10px;" >By Month &nbsp; <button onclick="toggleGrid();"></button></div>
+        <div   class="grid-stack-item-content" style="top:20px;">
+            <div id="graph1" ></div>
+            <div id="test" style="display: none;"></div>
+        </div>
+
+    </div>
+    <div  class="grid-stack-item"
+         data-gs-x="4" data-gs-y="0"
+         data-gs-width="5" data-gs-height="4">
+        <div style="padding-left:  10px;">By Salesperson</div>
+        <div id="graph2" class="grid-stack-item-content" style="top:20px;"></div>
+    </div>
+
+    <div  class="grid-stack-item"
+          data-gs-x="9" data-gs-y="0"
+          data-gs-width="3" data-gs-height="4">
+        <div style="padding-left:  10px;">By Region</div>
+        <div id="graph5" class="grid-stack-item-content" style="top:20px;"></div>
+    </div>
+
+<!--    2nd row-->
+
+    <div class="grid-stack-item"
+         data-gs-x="0" data-gs-y="4"
+         data-gs-width="6" data-gs-height="3">
+        <div style="padding-left:  10px;">By Customer Group</div>
+        <div id="graph3" class="grid-stack-item-content" style="top:20px;"></div>
+    </div>
+
+    <div  class="grid-stack-item"
+         data-gs-x="6" data-gs-y="4"
+         data-gs-width="6" data-gs-height="3">
+        <div style="padding-left:  10px;">By Product Category</div>
+        <div id="graph4" class="grid-stack-item-content" style="top:20px;"></div>
+    </div>
+
+
+
+<!--    <div  class="grid-stack-item"
+          data-gs-x="0" data-gs-y="6"
+          data-gs-width="5" data-gs-height="3">
+        <div style="padding-left:  10px;">By Region</div>
+        <div  class="grid-stack-item-content" style="top:20px;">
+
+            <div id="test"></div>
+        </div>
+    </div>-->
+
+</div>
+
+
+</body>
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="./css/gridstack.css"/>
+
+<script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
+<script src="./js/jquery-ui.js"></script>
+<script src="./js/lodash_min.js"></script>
+<script src="./js/gridstack.js"></script>
+
+<script type="text/javascript" src="js/d3.js"></script>
+<script type="text/javascript" src="js/d3grid.js"></script>
+<script type="text/javascript" src="js/crosstest.js"></script>
+<script type="text/javascript" src="js/dc.js"></script>
+<script type="text/javascript" src="js/colorbrewer.js"></script>
+<script type="text/javascript" src="dash_whytes_new.js"></script>
+
+
+<script type="text/javascript">
+    $(function () {
+        var options = {
+            alwaysShowResizeHandle: true,
+            cell_height: 80,
+            vertical_margin: 10
+        };
+        $('.grid-stack').gridstack(options);
+    });
+</script>
+
+
+
+</html>
