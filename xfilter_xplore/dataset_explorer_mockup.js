@@ -3,25 +3,67 @@
 
 // todo move this to a resource file under data
 var schema = {
-    "dimensions": [
-        {
-            "column": "month"
-        },
-        {
-            "column": "category"
-        },
-        {
-            "column": "region"
-        },
-        {
-            "column": "customer"
-        },
-        {
-            "column": "salesperson"
-        }
-    ],
+    "dimensions": [ "month", "category", "region", "customer", "salesperson" ],
     "groupBy": ["sales", "m_gm"],
-    "metric": "m_sales"
+    "metric": "m_sales",
+    "charts": [
+        {
+            "id" : "graph1",
+            "dimension" : "month",
+            "group1" : [ "month", "sales"],
+            "group2" : [ "month", "m_gm"],
+            "axisValues" : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            "width" : 600,
+            "height": 240,
+            "gap" : 30,
+            "topn" : 12,
+            "chartNo" : 1
+        },
+        {
+            "id" : "graph2",
+            "dimension" : "customer",
+            "group1" : [ "salesperson", "sales"],
+            "group2" : [ "salesperson", "m_gm"],
+            "width" : 726,
+            "height": 240,
+            "gap" : 30,
+            "topn" : 15,
+            "chartNo" : 2
+        },
+        {
+            "id" : "graph3",
+            "dimension" : "customer",
+            "group1" : [ "customer", "sales"],
+            "group2" : [ "customer", "m_gm"],
+            "width" : 930,
+            "height": 240,
+            "gap" : 26.5,
+            "topn" : 22,
+            "chartNo" : 3
+        },
+        {
+            "id" : "graph4",
+            "dimension" : "category",
+            "group1" : [ "category", "sales"],
+            "group2" : [ "category", "m_gm"],
+            "width" : 840,
+            "height": 240,
+            "gap" : 29,
+            "topn" : 18,
+            "chartNo" : 4
+        },
+        {
+            "id" : "graph5",
+            "dimension" : "region",
+            "group1" : [ "region", "sales"],
+            "group2" : [ "region", "m_gm"],
+            "width" : 410,
+            "height": 240,
+            "gap" : 30,
+            "topn" : 12,
+            "chartNo" : 5
+        }
+    ]
 };
 
 d3.csv('data/2014_SALES.csv', function (data) {
@@ -33,19 +75,13 @@ d3.csv('data/2014_SALES.csv', function (data) {
     var dimensions = {};
     var groups = {};
 
-    schema.dimensions.map(function (schema) {
-        return {
-            "column": schema.column,
-            "handler": function (d) {
-                return d[schema.column];
-            }
-        }
-    }).forEach(function (dimensionProvider) {
-        var dimension = ndx2.dimension(dimensionProvider.handler);
-        var dimensionName = "dim_" + dimensionProvider.column;
+    schema.dimensions.forEach(function (column) {
+        var handler = function (d) { return d[column]; };
+        var dimension = ndx2.dimension(handler);
+        var dimensionName = "dim_" + column;
         dimensions[dimensionName] = dimension;
         schema.groupBy.forEach(function (groupByColumn) {
-            var groupName = "m_" + dimensionProvider.column + "_" + groupByColumn;
+            var groupName = "m_" + column + "_" + groupByColumn;
             groups[groupName] = dimension.group().reduceSum(function (d) {
                 if (d[groupByColumn] != "NULL") {
                     return d[schema.metric];
