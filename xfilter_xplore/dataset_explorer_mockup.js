@@ -21,7 +21,7 @@ var schema = {
         }
     ],
     "groupBy": ["sales", "m_gm"],
-    "measure" : "m_sales"
+    "metric" : "m_sales"
 };
 
 d3.csv('data/2014_SALES.csv', function (data) {
@@ -30,53 +30,33 @@ d3.csv('data/2014_SALES.csv', function (data) {
     //### Create Crossfilter Dimensions and Groups
     //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
     var ndx2 = crossfilter(data);
+    var dimensions = {};
+    var groups = {};
 
-    var dimensionProviders = schema.dimensions.map( function(schema) {
+    schema.dimensions.map( function(schema) {
         return {
             "column" : schema.column,
             "handler" : function(d) { return d[schema.column]; }
         }
-    });
-
-    // dimension by month
-    var dim_month = ndx2.dimension(function (d) {
-        return d.month;
-    });
-
-    // group by
-    var m_month_sales = dim_month.group().reduceSum(function (d) {
-        if (d.m_sales != "NULL") {
-            return d.m_sales;
-        }
-        else {
-            return 0;
-        }
-
-    });
-
-    var dimensions = {};
-    var groups = {};
-    dimensionProviders.forEach(function(dimensionProvider) {
+    })
+    .forEach(function(dimensionProvider) {
         var dimension = ndx2.dimension(dimensionProvider.handler);
         var dimensionName = "dim_" + dimensionProvider.column;
         dimensions[dimensionName] = dimension;
-        console.log(dimensionName);
         schema.groupBy.forEach( function(groupByColumn) {
             var groupName = "m_" + dimensionProvider.column + "_" + groupByColumn;
-            console.log(groupName);
             groups[groupName] = dimension.group().reduceSum(function (d) {
                 if (d[groupByColumn] != "NULL") {
-                    return d[schema.measure];
+                    return d[schema.metric];
                 }
                 else {
                     return 0;
                 }
             })
         })
-
     });
 
-    var test = m_month_sales.top(Infinity);
+    var test = groups.m_month_sales.top(Infinity);
 
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     createCompositeChart("#graph1", dimensions.dim_month, groups.m_month_sales, groups.m_month_m_gm, months, 600, 240, 30, 12, 1);
