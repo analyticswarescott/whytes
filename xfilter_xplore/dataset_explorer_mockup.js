@@ -68,13 +68,13 @@ var schema = {
 
 d3.csv('data/2014_SALES.csv', function (data) {
     /* since its a csv file we need to format the data a bit */
-
     //### Create Crossfilter Dimensions and Groups
     //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
     var ndx2 = crossfilter(data);
+
+    // define dimensions and groups from schema and data
     var dimensions = {};
     var groups = {};
-
     schema.dimensions.forEach(function (column) {
         var handler = function (d) { return d[column]; };
         var dimension = ndx2.dimension(handler);
@@ -93,22 +93,22 @@ d3.csv('data/2014_SALES.csv', function (data) {
         })
     });
 
+    // plot charts
     var test = groups.m_month_sales.top(Infinity);
-
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    createCompositeChart("#graph1", dimensions.dim_month, groups.m_month_sales, groups.m_month_m_gm, months, 600, 240, 30, 12, 1);
-
-    createCompositeChart("#graph2", dimensions.dim_salesperson, groups.m_salesperson_sales, groups.m_salesperson_m_gm, null, 726
-        , 240, 30, 15, 2);
-
-    createCompositeChart("#graph3", dimensions.dim_customer, groups.m_customer_sales, groups.m_customer_m_gm, null, 930
-        , 240, 26.5, 22, 3);
-
-    createCompositeChart("#graph4", dimensions.dim_category, groups.m_category_sales, groups.m_category_m_gm, null, 840
-        , 240, 29, 18, 4);
-
-    createCompositeChart("#graph5", dimensions.dim_region, groups.m_region_sales, groups.m_region_m_gm, null, 410
-        , 240, 30, 12, 5);
+    schema.charts.forEach( function(chart) {
+        createCompositeChart(
+            "#" + chart.id,
+            dimensions["dim_" + chart.dimension],
+            groups[ "m_" + chart.group1[0] + "_" + chart.group1[1] ],
+            groups[ "m_" + chart.group2[0] + "_" + chart.group2[1] ],
+            chart.axisValues,
+            chart.width,
+            chart.height,
+            chart.gap,
+            chart.topn,
+            chart.chartNo
+        );
+    });
 
     createDataGrid("#test", dimensions.dim_month, groups.m_month_sales);
 
