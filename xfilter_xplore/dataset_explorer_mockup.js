@@ -21,7 +21,7 @@ var schema = {
         }
     ],
     "groupBy": ["sales", "m_gm"],
-    "metric" : "m_sales"
+    "metric": "m_sales"
 };
 
 d3.csv('data/2014_SALES.csv', function (data) {
@@ -33,17 +33,18 @@ d3.csv('data/2014_SALES.csv', function (data) {
     var dimensions = {};
     var groups = {};
 
-    schema.dimensions.map( function(schema) {
+    schema.dimensions.map(function (schema) {
         return {
-            "column" : schema.column,
-            "handler" : function(d) { return d[schema.column]; }
+            "column": schema.column,
+            "handler": function (d) {
+                return d[schema.column];
+            }
         }
-    })
-    .forEach(function(dimensionProvider) {
+    }).forEach(function (dimensionProvider) {
         var dimension = ndx2.dimension(dimensionProvider.handler);
         var dimensionName = "dim_" + dimensionProvider.column;
         dimensions[dimensionName] = dimension;
-        schema.groupBy.forEach( function(groupByColumn) {
+        schema.groupBy.forEach(function (groupByColumn) {
             var groupName = "m_" + dimensionProvider.column + "_" + groupByColumn;
             groups[groupName] = dimension.group().reduceSum(function (d) {
                 if (d[groupByColumn] != "NULL") {
@@ -83,19 +84,15 @@ function redrawExcept(chartNo) {
 }
 
 function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w, h, gap, topn, chartNo) {
-
-
     var filteredGroup = (function (source_group) {
         return {
             all: function () {
                 return source_group.top(topn).filter(function (d) {
                     return d.key;
-                    ;
                 });
             }
         };
     })(group1);
-
 
     //make sure second group follows first, not top 10 as it could be different
     var filteredGroup2 = (function (source_group) {
@@ -105,40 +102,22 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
                     for (var i = 0; i < filteredGroup.all().length; i++) {
                         if (filteredGroup.all()[i].key === d.key) {
                             return d.key;
-                            ;
                         }
                     }
-
                 });
             }
-
         };
     })(group2);
 
-
     var composite = dc.compositeChart(targetDiv);
-
-    /*        var vals;
-     if (!axisVals) {
-     vals = filteredGroup.all().map(function (d) {
-     return d.key; });
-
-     }
-     else {
-     vals = axisVals;
-     }*/
-
     var clicked;
     var c1 = dc.barChart(composite)
-    //  .dimension(dim_month)
         .gap(gap)
-        // .margins({left: 222})
         .group(filteredGroup)
         .colors('lightsteelblue')
         .on('filtered', function (chart, filter) {
             redrawExcept(chartNo);
         });
-
 
     var c2 = dc.barChart(composite)
         .gap(gap)
@@ -167,11 +146,8 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
         .mouseZoomable(true)
         .on('postRedraw', function (chart) {
             clicked = null;
-
         })
         .elasticY(true)
-
-        ///.elasticX(true)
         .brushOn(false);
 
     composite.yAxis().tickFormat(function (d) {
@@ -198,15 +174,12 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
 }
 
 function createDataGrid(targetDiv, dimension, group) {
-
     var grid = d3.divgrid();
-
     d3.csv('data/month_pivot.csv', function (data) {
         d3.select(targetDiv)
             .datum(data)
             .call(grid)
     });
-
 }
 
 var gridvis = false;
@@ -220,6 +193,4 @@ function toggleGrid() {
         grid.style.display = 'block';
         gridvis = true;
     }
-
-
 }
