@@ -1,6 +1,29 @@
 //# dc.js Getting Started and How-To Guide
 'use strict';
 
+// todo move this to a resource file under data
+var schema = {
+    "dimensions": [
+        {
+            "column": "month"
+        },
+        {
+            "column": "category"
+        },
+        {
+            "column": "region"
+        },
+        {
+            "column": "customer"
+        },
+        {
+            "column": "salesperson"
+        }
+    ],
+    "groupBy": ["sales", "m_gm"],
+    "measure" : "m_sales"
+};
+
 var c1
     , c2, c3, c4, c5;
 
@@ -10,28 +33,32 @@ d3.csv('data/2014_SALES.csv', function (data) {
     //### Create Crossfilter Dimensions and Groups
     //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
     var ndx2 = crossfilter(data);
-    var all2 = ndx2.groupAll();
+
+    var dimensionProviders = schema.dimensions.map( function(schema) {
+        return {
+            "column" : schema.column,
+            "handler" : function(d) { return d[schema.column]; }
+        }
+    });
+
 
     // dimension by month
     var dim_month = ndx2.dimension(function (d) {
         return d.month;
-
     });
 
-
-    var dim_category = ndx2.dimension(function (d) {
-        return d.category;
-    });
-    var dim_region = ndx2.dimension(function (d) {
-        return d.region;
-    });
-    var dim_customer = ndx2.dimension(function (d) {
-        return d.customer;
-    });
-    var dim_rep = ndx2.dimension(function (d) {
-        return d.salesperson;
-    });
-
+    // var dim_category = ndx2.dimension(function (d) {
+    //     return d.category;
+    // });
+    // var dim_region = ndx2.dimension(function (d) {
+    //     return d.region;
+    // });
+    // var dim_customer = ndx2.dimension(function (d) {
+    //     return d.customer;
+    // });
+    // var dim_rep = ndx2.dimension(function (d) {
+    //     return d.salesperson;
+    // });
 
     // group by
     var m_month_sales = dim_month.group().reduceSum(function (d) {
@@ -43,47 +70,47 @@ d3.csv('data/2014_SALES.csv', function (data) {
         }
 
     });
-
-    var m_cat_sales = dim_category.group().reduceSum(function (d) {
-        if (d.m_sales != "NULL") {
-            return d.m_sales;
-        }
-        else {
-            return 0;
-        }
-
-    });
-
-    var m_region_sales = dim_region.group().reduceSum(function (d) {
-        if (d.m_sales != "NULL") {
-            return d.m_sales;
-        }
-        else {
-            return 0;
-        }
-
-    });
-
-    var m_customer_sales = dim_customer.group().reduceSum(function (d) {
-        if (d.m_sales != "NULL") {
-            return d.m_sales;
-        }
-        else {
-            return 0;
-        }
-
-    });
-
-    var m_rep_sales = dim_rep.group().reduceSum(function (d) {
-        if (d.m_sales != "NULL") {
-            return d.m_sales;
-        }
-        else {
-            return 0;
-        }
-
-    });
-
+    //
+    // var m_cat_sales = dim_category.group().reduceSum(function (d) {
+    //     if (d.m_sales != "NULL") {
+    //         return d.m_sales;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    //
+    // });
+    //
+    // var m_region_sales = dim_region.group().reduceSum(function (d) {
+    //     if (d.m_sales != "NULL") {
+    //         return d.m_sales;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    //
+    // });
+    //
+    // var m_customer_sales = dim_customer.group().reduceSum(function (d) {
+    //     if (d.m_sales != "NULL") {
+    //         return d.m_sales;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    //
+    // });
+    //
+    // var m_rep_sales = dim_rep.group().reduceSum(function (d) {
+    //     if (d.m_sales != "NULL") {
+    //         return d.m_sales;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    //
+    // });
+    //
     var m_month_gm = dim_month.group().reduceSum(function (d) {
         if (d.m_gm != "NULL") {
             return d.m_sales * (1.1);
@@ -92,65 +119,82 @@ d3.csv('data/2014_SALES.csv', function (data) {
             return 0;
         }
     });
+    //
+    // var m_rep_gm = dim_rep.group().reduceSum(function (d) {
+    //     if (d.m_gm != "NULL") {
+    //         return d.m_sales * 1.1;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    // });
+    //
+    // var m_cust_gm = dim_customer.group().reduceSum(function (d) {
+    //     if (d.m_gm != "NULL") {
+    //         return d.m_sales * 1.1;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    // });
+    //
+    // var m_cat_gm = dim_category.group().reduceSum(function (d) {
+    //     if (d.m_gm != "NULL") {
+    //         return d.m_sales * 1.1;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    // });
+    //
+    // var m_reg_gm = dim_region.group().reduceSum(function (d) {
+    //     if (d.m_gm != "NULL") {
+    //         return d.m_sales * 1.1;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    // });
 
-    var m_rep_gm = dim_rep.group().reduceSum(function (d) {
-        if (d.m_gm != "NULL") {
-            return d.m_sales * 1.1;
-        }
-        else {
-            return 0;
-        }
-    });
+    var dimensions = {};
+    var groups = {};
+    dimensionProviders.forEach(function(dimensionProvider) {
+        var dimension = ndx2.dimension(dimensionProvider.handler);
+        var dimensionName = "dim_" + dimensionProvider.column;
+        dimensions[dimensionName] = dimension;
+        console.log(dimensionName);
+        schema.groupBy.forEach( function(groupByColumn) {
+            var groupName = "m_" + dimensionProvider.column + "_" + groupByColumn;
+            console.log(groupName);
+            groups[groupName] = dimension.group().reduceSum(function (d) {
+                if (d[groupByColumn] != "NULL") {
+                    return d[schema.measure];
+                }
+                else {
+                    return 0;
+                }
+            })
+        })
 
-    var m_cust_gm = dim_customer.group().reduceSum(function (d) {
-        if (d.m_gm != "NULL") {
-            return d.m_sales * 1.1;
-        }
-        else {
-            return 0;
-        }
-    });
-
-    var m_cat_gm = dim_category.group().reduceSum(function (d) {
-        if (d.m_gm != "NULL") {
-            return d.m_sales * 1.1;
-        }
-        else {
-            return 0;
-        }
-    });
-
-    var m_reg_gm = dim_region.group().reduceSum(function (d) {
-        if (d.m_gm != "NULL") {
-            return d.m_sales * 1.1;
-        }
-        else {
-            return 0;
-        }
     });
 
     var test = m_month_sales.top(Infinity);
-    var test2 = m_region_sales.top(Infinity);
-    var test3 = m_customer_sales.top(Infinity);
-    var grpCat = m_cat_sales.top(Infinity);
-    var grpRep = m_rep_sales.top(Infinity);
-
 
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    c1 = createCompositeChart("#graph1", dim_month, m_month_sales, m_month_gm, months, 600, 240, 30, 12, 1);
+    createCompositeChart("#graph1", dimensions.dim_month, groups.m_month_sales, groups.m_month_m_gm, months, 600, 240, 30, 12, 1);
 
-    c2 = createCompositeChart("#graph2", dim_rep, m_rep_sales, m_rep_gm, null, 726
+    createCompositeChart("#graph2", dimensions.dim_salesperson, groups.m_salesperson_sales, groups.m_salesperson_m_gm, null, 726
         , 240, 30, 15, 2);
 
-    c3 = createCompositeChart("#graph3", dim_customer, m_customer_sales, m_cust_gm, null, 930
-        , 240, 26.5, 22, 3);
-
-    c4 = createCompositeChart("#graph4", dim_category, m_cat_sales, m_cat_gm, null, 840
-        , 240, 29, 18, 4);
-
-    c5 = createCompositeChart("#graph5", dim_region, m_region_sales, m_reg_gm, null, 410
-        , 240, 30, 12, 5);
-
+    // createCompositeChart("#graph3", dim_customer, m_customer_sales, m_cust_gm, null, 930
+    //     , 240, 26.5, 22, 3);
+    //
+    // createCompositeChart("#graph4", dim_category, m_cat_sales, m_cat_gm, null, 840
+    //     , 240, 29, 18, 4);
+    //
+    // createCompositeChart("#graph5", dim_region, m_region_sales, m_reg_gm, null, 410
+    //     , 240, 30, 12, 5);
+    //
     createDataGrid("#test", dim_month, m_month_sales);
 
     dc.renderAll();
