@@ -9,6 +9,7 @@ var schema = {
     "charts": [
         {
             "id" : "graph1",
+            "name": "By Month",
             "dimension" : "month",
             "group1" : [ "month", "sales"],
             "group2" : [ "month", "m_gm"],
@@ -16,52 +17,51 @@ var schema = {
             "width" : 600,
             "height": 240,
             "gap" : 30,
-            "topn" : 12,
-            "chartNo" : 1
+            "topn" : 12
         },
         {
             "id" : "graph2",
+            "name": "By Salesperson",
             "dimension" : "customer",
             "group1" : [ "salesperson", "sales"],
             "group2" : [ "salesperson", "m_gm"],
             "width" : 726,
             "height": 240,
             "gap" : 30,
-            "topn" : 15,
-            "chartNo" : 2
+            "topn" : 15
         },
         {
             "id" : "graph3",
+            "name": "By Region",
             "dimension" : "customer",
             "group1" : [ "customer", "sales"],
             "group2" : [ "customer", "m_gm"],
             "width" : 930,
             "height": 240,
             "gap" : 26.5,
-            "topn" : 22,
-            "chartNo" : 3
+            "topn" : 22
         },
         {
             "id" : "graph4",
+            "name": "By Customer Group",
             "dimension" : "category",
             "group1" : [ "category", "sales"],
             "group2" : [ "category", "m_gm"],
             "width" : 840,
             "height": 240,
             "gap" : 29,
-            "topn" : 18,
-            "chartNo" : 4
+            "topn" : 18
         },
         {
             "id" : "graph5",
+            "name": "By Product Category",
             "dimension" : "region",
             "group1" : [ "region", "sales"],
             "group2" : [ "region", "m_gm"],
             "width" : 410,
             "height": 240,
             "gap" : 30,
-            "topn" : 12,
-            "chartNo" : 5
+            "topn" : 12
         }
     ]
 };
@@ -95,6 +95,7 @@ d3.csv('data/2014_SALES.csv', function (data) {
 
     // plot charts
     var test = groups.m_month_sales.top(Infinity);
+    var chartNumber = 0;
     schema.charts.forEach( function(chart) {
         createCompositeChart(
             "#" + chart.id,
@@ -106,7 +107,7 @@ d3.csv('data/2014_SALES.csv', function (data) {
             chart.height,
             chart.gap,
             chart.topn,
-            chart.chartNo
+            ++chartNumber
         );
     });
 
