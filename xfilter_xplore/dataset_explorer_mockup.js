@@ -4,6 +4,7 @@
 // todo move this to a resource file under data
 var schema_whytes = {
     "title": "Whytes",
+    "source": "data/2014_SALES.csv",
     "measures" : [
         {
             "id" : "m_sales",
@@ -121,7 +122,7 @@ function getGroup(schema, dimensionColumn, measureColumn, metric) {
 }
 
 function setupGraphs(schema) {
-    d3.csv('data/2014_SALES.csv', function (data) {
+    d3.csv(schema.source, function (data) {
         ndx2 = crossfilter(data);
         // plot charts
         var chartNumber = 0;
