@@ -5,17 +5,6 @@
 var schema_whytes = {
     "title": "Whytes",
     "source": "data/2014_SALES.csv",
-    "measures" : [
-        {
-            "id" : "m_sales",
-            "name" : "Gross Sales"
-        },
-        {
-            "id" : "m_gm",
-            "name" : "Gross Margin"
-        }
-    ],
-    "metric": "m_gm",
     "charts": [
         {
             "name": "By Month",
@@ -72,6 +61,55 @@ var schema_whytes = {
             "gsX" : 0,
             "gxY" : 4,
             "gsWidth" : 4,
+            "gsHeight" : 3
+        }
+    ]
+};
+
+var schema_cordova = {
+    "title": "Cordova",
+    "source": "data/cordova_dealer_ds/data-table.csv",
+    "charts": [
+        {
+            "name": "By Dealer",
+            "dimension" : "dealer",
+            "measure1" : "number_of_rounds",
+            "measure2" : "number_of_rounds",
+            "width" : 600,
+            "height": 240,
+            "gap" : 30,
+            "topn" : 12,
+            "gsX" : 0,
+            "gxY" : 0,
+            "gsWidth" : 4,
+            "gsHeight" : 3
+        },
+        {
+            "name": "By Table Name",
+            "dimension" : "table_name",
+            "measure1" : "number_of_rounds",
+            "measure2" : "number_of_rounds",
+            "width" : 726,
+            "height": 240,
+            "gap" : 30,
+            "topn" : 15,
+            "gsX" : 4,
+            "gxY" : 0,
+            "gsWidth" : 4,
+            "gsHeight" : 3
+        },
+        {
+            "name": "By Game Day",
+            "dimension" : "game_day",
+            "measure1" : "number_of_rounds",
+            "measure2" : "number_of_rounds",
+            "width" : 930,
+            "height": 240,
+            "gap" : 26.5,
+            "topn" : 22,
+            "gsX" : 0,
+            "gxY" : 4,
+            "gsWidth" : 6,
             "gsHeight" : 3
         }
     ]
