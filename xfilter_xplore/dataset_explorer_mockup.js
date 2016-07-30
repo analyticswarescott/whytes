@@ -3,15 +3,13 @@
 
 // todo move this to a resource file under data
 var schema = {
-    "dimensions": [ "year", "month", "salesperson", "category", "region", "customer", "m_sales", "m_gm" ],
-    "groupBy": ["sales", "m_gm"],
     "metric": "m_sales",
     "charts": [
         {
             "name": "By Month",
             "dimension" : "month",
-            "group1" : "sales",
-            "group2" : "m_gm",
+            "measure1" : "sales",
+            "measure2" : "m_gm",
             "axisValues" : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             "width" : 600,
             "height": 240,
@@ -25,8 +23,8 @@ var schema = {
         {
             "name": "By Salesperson",
             "dimension" : "salesperson",
-            "group1" : "sales",
-            "group2" : "m_gm",
+            "measure1" : "sales",
+            "measure2" : "m_gm",
             "width" : 726,
             "height": 240,
             "gap" : 30,
@@ -39,8 +37,8 @@ var schema = {
         {
             "name": "By Region",
             "dimension" : "region",
-            "group1" : "sales",
-            "group2" : "m_gm",
+            "measure1" : "sales",
+            "measure2" : "m_gm",
             "width" : 930,
             "height": 240,
             "gap" : 26.5,
@@ -53,8 +51,8 @@ var schema = {
         {
             "name": "By Customer Group",
             "dimension" : "customer",
-            "group1" : "sales",
-            "group2" : "m_gm",
+            "measure1" : "sales",
+            "measure2" : "m_gm",
             "width" : 840,
             "height": 240,
             "gap" : 29,
@@ -63,18 +61,31 @@ var schema = {
             "gxY" : 4,
             "gsWidth" : 4,
             "gsHeight" : 3
-        }
-        ,
+        },
         {
             "name": "By Product Category",
             "dimension" : "category",
-            "group1" : "sales",
-            "group2" : "m_gm",
+            "measure1" : "sales",
+            "measure2" : "m_gm",
             "width" : 410,
             "height": 240,
             "gap" : 30,
             "topn" : 12,
             "gsX" : 4,
+            "gxY" : 4,
+            "gsWidth" : 4,
+            "gsHeight" : 3
+        },
+        {
+            "name": "By Year",
+            "dimension" : "year",
+            "measure1" : "sales",
+            "measure2" : "m_gm",
+            "width" : 410,
+            "height": 240,
+            "gap" : 30,
+            "topn" : 12,
+            "gsX" : 9,
             "gxY" : 4,
             "gsWidth" : 4,
             "gsHeight" : 3
@@ -144,8 +155,8 @@ d3.csv('data/2014_SALES.csv', function (data) {
         createCompositeChart(
             "#" + chartId,
             getDimension(schema, chart.dimension),
-            getGroup(schema, chart.dimension, chart.group1, schema.metric),
-            getGroup(schema, chart.dimension, chart.group2, schema.metric),
+            getGroup(schema, chart.dimension, chart.measure1, schema.metric),
+            getGroup(schema, chart.dimension, chart.measure2, schema.metric),
             chart.axisValues,
             chart.width,
             chart.height,
@@ -162,7 +173,7 @@ function redrawExcept(chartNo) {
     // dc.renderAll();
 }
 
-function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w, h, gap, topn, chartNo) {
+function createCompositeChart(targetDiv, dimension, measure1, measure2, axisVals, w, h, gap, topn, chartNo) {
     var filteredGroup = (function (source_group) {
         return {
             all: function () {
@@ -171,10 +182,10 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
                 });
             }
         };
-    })(group1);
+    })(measure1);
 
     //make sure second group follows first, not top 10 as it could be different
-    var filteredGroup2 = (function (source_group) {
+    var filteredmeasure2 = (function (source_group) {
         return {
             all: function () {
                 return source_group.all().filter(function (d) {
@@ -186,7 +197,7 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
                 });
             }
         };
-    })(group2);
+    })(measure2);
 
     var composite = dc.compositeChart(targetDiv);
     var clicked;
@@ -201,7 +212,7 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
     var c2 = dc.barChart(composite)
         .gap(gap)
         .centerBar(true)
-        .group(filteredGroup2)
+        .group(filteredmeasure2)
         .colors('green');
 
     composite
