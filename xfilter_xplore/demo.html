@@ -32,7 +32,7 @@
 </style>
 
 <body style="background-color: whitesmoke;">
-<div style=" height: 50px; padding-left: 10px; padding-top: 10px; background-color: black; color: white" ><H5> Example - Whyte's Sales Analysis</H5></div>
+<div style=" height: 50px; padding-left: 10px; padding-top: 10px; background-color: black; color: white" ><H5 class="title"></H5></div>
 
 <!--header -->
 <!--<div style=" background-color: lightblue; padding-left: 10px;  padding-top: 2px; padding-bottom: 2px; top: 10px; left: 10px;" > Division:-->
@@ -98,7 +98,7 @@
             vertical_margin: 10
         };
 
-        setupGraphs();
+        setupGraphs(schema_whytes);
         setTimeout( function() {
             $('.grid-stack').gridstack(options);
         }, 500)

@@ -2,7 +2,8 @@
 'use strict';
 
 // todo move this to a resource file under data
-var schema = {
+var schema_whytes = {
+    "title": "Whytes",
     "measures" : [
         {
             "id" : "m_sales",
@@ -119,7 +120,7 @@ function getGroup(schema, dimensionColumn, measureColumn, metric) {
     return group;
 }
 
-function setupGraphs() {
+function setupGraphs(schema) {
     d3.csv('data/2014_SALES.csv', function (data) {
         ndx2 = crossfilter(data);
         // plot charts
@@ -150,6 +151,8 @@ function setupGraphs() {
 
         dc.renderAll();
     });
+
+    $(".title").text(schema.title)
 }
 
 
