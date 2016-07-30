@@ -5,6 +5,16 @@
 var schema_whytes = {
     "title": "Whytes",
     "source": "data/2014_SALES.csv",
+    "measures": [
+        {
+            "id": "m_sales",
+            "name" : "Gross Sales"
+        },
+        {
+            "id": "m_gm",
+            "name" : "Gross Margin"
+        }
+    ],
     "charts": [
         {
             "name": "By Month",
@@ -65,6 +75,20 @@ var schema_whytes = {
 var schema_cordova = {
     "title": "Cordova",
     "source": "data/cordova_dealer_ds/data-table.csv",
+    "measures" : [
+        {
+            "id": "number_of_rounds",
+            "name" : "Number of Rounds"
+        },
+        {
+            "id": "fees_collected",
+            "name" : "Feeds Collected"
+        },
+        {
+            "id": "dealer_error_count",
+            "name" : "Dealer Error Count"
+        }
+    ],
     "charts": [
         {
             "name": "By Dealer",
@@ -183,7 +207,16 @@ function setupGraphs(schema) {
         dc.renderAll();
     });
 
+    // setup title
     $(".title").text(schema.title)
+
+    // setup measures
+    schema.measures.forEach( function(measure) {
+        var option = $("<option/>");
+        option.attr("value", measure.id);
+        option.text(measure.name)
+        $(".measures").append(option);
+    })
 }
 
 
