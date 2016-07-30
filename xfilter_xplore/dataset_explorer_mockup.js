@@ -54,21 +54,22 @@ var schema = {
             "gsWidth" : 4,
             "gsHeight" : 3
         },
-        // {
-        //     "id" : "graph4",
-        //     "name": "By Customer Group",
-        //     "dimension" : "category",
-        //     "group1" : [ "category", "sales"],
-        //     "group2" : [ "category", "m_gm"],
-        //     "width" : 840,
-        //     "height": 240,
-        //     "gap" : 29,
-        //     "topn" : 18,
-        //     "gsX" : 0,
-        //     "gxY" : 4,
-        //     "gsWidth" : 6,
-        //     "gsHeight" : 3
-        // },
+        {
+            "id" : "graph4",
+            "name": "By Customer Group",
+            "dimension" : "category",
+            "group1" : [ "category", "sales"],
+            "group2" : [ "category", "m_gm"],
+            "width" : 840,
+            "height": 240,
+            "gap" : 29,
+            "topn" : 18,
+            "gsX" : 0,
+            "gxY" : 4,
+            "gsWidth" : 6,
+            "gsHeight" : 3
+        }
+        // ,
         // {
         //     "id" : "graph5",
         //     "name": "By Product Category",
