@@ -35,27 +35,27 @@
 <div style=" height: 50px; padding-left: 10px; padding-top: 10px; background-color: black; color: white" ><H5> Example - Whyte's Sales Analysis</H5></div>
 
 <!--header -->
-<div style=" background-color: lightblue; padding-left: 10px;  padding-top: 2px; padding-bottom: 2px; top: 10px; left: 10px;" > Division:
-    <select style=" vertical-align: top;">
-    <option value="RT">RT</option>
-    <option value="FS">FS</option>
-    <option value="MG">MG</option>
-    <option value="XX">XX</option>
-</select>
-    &nbsp;
-    Year:
-    <select style=" vertical-align: top;">
-        <option value="2015">2015</option>
-        <option value="2014">2014</option>
-    </select>
-    &nbsp;
-    Metric:
-    <select style=" vertical-align: top;">
-        <option value="Gross Sales">Gross Sales</option>
-        <option value="Gross Margin">Gross Margin</option>
-        <option value="Net Sales">Net Sales</option>
-    </select>
-</div>
+<!--<div style=" background-color: lightblue; padding-left: 10px;  padding-top: 2px; padding-bottom: 2px; top: 10px; left: 10px;" > Division:-->
+    <!--<select style=" vertical-align: top;">-->
+    <!--<option value="RT">RT</option>-->
+    <!--<option value="FS">FS</option>-->
+    <!--<option value="MG">MG</option>-->
+    <!--<option value="XX">XX</option>-->
+<!--</select>-->
+    <!--&nbsp;-->
+    <!--Year:-->
+    <!--<select style=" vertical-align: top;">-->
+        <!--<option value="2015">2015</option>-->
+        <!--<option value="2014">2014</option>-->
+    <!--</select>-->
+    <!--&nbsp;-->
+    <!--Metric:-->
+    <!--<select style=" vertical-align: top;">-->
+        <!--<option value="Gross Sales">Gross Sales</option>-->
+        <!--<option value="Gross Margin">Gross Margin</option>-->
+        <!--<option value="Net Sales">Net Sales</option>-->
+    <!--</select>-->
+<!--</div>-->
 
 <!--grid item template -->
 <div class="grid-stack-item-template"
@@ -97,6 +97,8 @@
             cell_height: 80,
             vertical_margin: 10
         };
+
+        setupGraphs();
         setTimeout( function() {
             $('.grid-stack').gridstack(options);
         }, 500)

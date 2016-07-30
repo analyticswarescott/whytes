@@ -3,12 +3,22 @@
 
 // todo move this to a resource file under data
 var schema = {
-    "metric": "m_sales",
+    "measures" : [
+        {
+            "id" : "m_sales",
+            "name" : "Gross Sales"
+        },
+        {
+            "id" : "m_gm",
+            "name" : "Gross Margin"
+        }
+    ],
+    "metric": "m_gm",
     "charts": [
         {
             "name": "By Month",
             "dimension" : "month",
-            "measure1" : "sales",
+            "measure1" : "m_sales",
             "measure2" : "m_gm",
             "axisValues" : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             "width" : 600,
@@ -23,7 +33,7 @@ var schema = {
         {
             "name": "By Salesperson",
             "dimension" : "salesperson",
-            "measure1" : "sales",
+            "measure1" : "m_sales",
             "measure2" : "m_gm",
             "width" : 726,
             "height": 240,
@@ -37,7 +47,7 @@ var schema = {
         {
             "name": "By Region",
             "dimension" : "region",
-            "measure1" : "sales",
+            "measure1" : "m_sales",
             "measure2" : "m_gm",
             "width" : 930,
             "height": 240,
@@ -51,41 +61,13 @@ var schema = {
         {
             "name": "By Customer Group",
             "dimension" : "customer",
-            "measure1" : "sales",
+            "measure1" : "m_sales",
             "measure2" : "m_gm",
             "width" : 840,
             "height": 240,
             "gap" : 29,
             "topn" : 18,
             "gsX" : 0,
-            "gxY" : 4,
-            "gsWidth" : 4,
-            "gsHeight" : 3
-        },
-        {
-            "name": "By Product Category",
-            "dimension" : "category",
-            "measure1" : "sales",
-            "measure2" : "m_gm",
-            "width" : 410,
-            "height": 240,
-            "gap" : 30,
-            "topn" : 12,
-            "gsX" : 4,
-            "gxY" : 4,
-            "gsWidth" : 4,
-            "gsHeight" : 3
-        },
-        {
-            "name": "By Year",
-            "dimension" : "year",
-            "measure1" : "sales",
-            "measure2" : "m_gm",
-            "width" : 410,
-            "height": 240,
-            "gap" : 30,
-            "topn" : 12,
-            "gsX" : 9,
             "gxY" : 4,
             "gsWidth" : 4,
             "gsHeight" : 3
@@ -117,7 +99,6 @@ function getGroup(schema, dimensionColumn, measureColumn, metric) {
         return;
     }
 
-    var dimensionName = "dim_" + dimensionColumn;
     var groupName = "m_" + dimensionColumn + "_" + measureColumn + "_" + metric;
     var group = groups[groupName];
     if ( group ) {
@@ -126,7 +107,7 @@ function getGroup(schema, dimensionColumn, measureColumn, metric) {
 
     group = dimension.group().reduceSum(function (d) {
         if (d[measureColumn] != "NULL") {
-            return d[metric];
+            return d[measureColumn];
         }
         else {
             return 0;
@@ -138,42 +119,45 @@ function getGroup(schema, dimensionColumn, measureColumn, metric) {
     return group;
 }
 
-d3.csv('data/2014_SALES.csv', function (data) {
-    ndx2 = crossfilter(data);
-    // plot charts
-    var chartNumber = 0;
-    schema.charts.forEach( function(chart) {
-        var chartId = "graph" + ++chartNumber;
+function setupGraphs() {
+    d3.csv('data/2014_SALES.csv', function (data) {
+        ndx2 = crossfilter(data);
+        // plot charts
+        var chartNumber = 0;
+        schema.charts.forEach( function(chart) {
+            var chartId = "graph" + ++chartNumber;
 
-        var template = cloneTemplate(
-            chart.gsX, chart.gsY,
-            chart.gsWidth, chart.gsHeight,
-            chart.name, chartId);
+            var template = cloneTemplate(
+                chart.gsX, chart.gsY,
+                chart.gsWidth, chart.gsHeight,
+                chart.name, chartId);
 
-        $(".grid-stack").prepend( template );
+            $(".grid-stack").prepend( template );
 
-        createCompositeChart(
-            "#" + chartId,
-            getDimension(schema, chart.dimension),
-            getGroup(schema, chart.dimension, chart.measure1, schema.metric),
-            getGroup(schema, chart.dimension, chart.measure2, schema.metric),
-            chart.axisValues,
-            chart.width,
-            chart.height,
-            chart.gap,
-            chart.topn,
-            chartNumber
-        );
+            createCompositeChart(
+                "#" + chartId,
+                getDimension(schema, chart.dimension),
+                getGroup(schema, chart.dimension, chart.measure1, schema.metric),
+                getGroup(schema, chart.dimension, chart.measure2, schema.metric),
+                chart.axisValues,
+                chart.width,
+                chart.height,
+                chart.gap,
+                chart.topn,
+                chartNumber
+            );
+        });
+
+        dc.renderAll();
     });
+}
 
-    dc.renderAll();
-});
 
 function redrawExcept(chartNo) {
     // dc.renderAll();
 }
 
-function createCompositeChart(targetDiv, dimension, measure1, measure2, axisVals, w, h, gap, topn, chartNo) {
+function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w, h, gap, topn, chartNo) {
     var filteredGroup = (function (source_group) {
         return {
             all: function () {
@@ -182,7 +166,7 @@ function createCompositeChart(targetDiv, dimension, measure1, measure2, axisVals
                 });
             }
         };
-    })(measure1);
+    })(group1);
 
     //make sure second group follows first, not top 10 as it could be different
     var filteredmeasure2 = (function (source_group) {
@@ -197,7 +181,7 @@ function createCompositeChart(targetDiv, dimension, measure1, measure2, axisVals
                 });
             }
         };
-    })(measure2);
+    })(group2);
 
     var composite = dc.compositeChart(targetDiv);
     var clicked;
