@@ -10,7 +10,6 @@ var schema_whytes = {
             "name": "By Month",
             "dimension" : "month",
             "measure1" : "m_sales",
-            "measure2" : "m_gm",
             "axisValues" : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             "width" : 600,
             "height": 240,
@@ -25,7 +24,6 @@ var schema_whytes = {
             "name": "By Salesperson",
             "dimension" : "salesperson",
             "measure1" : "m_sales",
-            "measure2" : "m_gm",
             "width" : 726,
             "height": 240,
             "gap" : 30,
@@ -39,7 +37,6 @@ var schema_whytes = {
             "name": "By Region",
             "dimension" : "region",
             "measure1" : "m_sales",
-            "measure2" : "m_gm",
             "width" : 930,
             "height": 240,
             "gap" : 26.5,
@@ -53,7 +50,6 @@ var schema_whytes = {
             "name": "By Customer Group",
             "dimension" : "customer",
             "measure1" : "m_sales",
-            "measure2" : "m_gm",
             "width" : 840,
             "height": 240,
             "gap" : 29,
@@ -73,43 +69,40 @@ var schema_cordova = {
         {
             "name": "By Dealer",
             "dimension" : "dealer",
-            "measure1" : "number_of_rounds",
-            "measure2" : "number_of_rounds",
+            "measure1" : "dealer_error_count",
             "width" : 600,
             "height": 240,
             "gap" : 30,
             "topn" : 12,
             "gsX" : 0,
-            "gxY" : 0,
-            "gsWidth" : 4,
+            "gxY" : 4,
+            "gsWidth" : 6,
             "gsHeight" : 3
         },
         {
             "name": "By Table Name",
             "dimension" : "table_name",
-            "measure1" : "number_of_rounds",
-            "measure2" : "number_of_rounds",
-            "width" : 726,
+            "measure1" : "dealer_error_count",
+            "width" : 500,
             "height": 240,
             "gap" : 30,
             "topn" : 15,
-            "gsX" : 4,
-            "gxY" : 0,
-            "gsWidth" : 4,
+            "gsX" : 6,
+            "gxY" : 4,
+            "gsWidth" : 6,
             "gsHeight" : 3
         },
         {
             "name": "By Game Day",
             "dimension" : "game_day",
-            "measure1" : "number_of_rounds",
-            "measure2" : "number_of_rounds",
+            "measure1" : "dealer_error_count",
             "width" : 930,
             "height": 240,
             "gap" : 26.5,
             "topn" : 22,
             "gsX" : 0,
-            "gxY" : 4,
-            "gsWidth" : 6,
+            "gxY" : 0,
+            "gsWidth" : 9,
             "gsHeight" : 3
         }
     ]
@@ -174,11 +167,10 @@ function setupGraphs(schema) {
 
             $(".grid-stack").prepend( template );
 
-            createCompositeChart(
+            createSingleMeasureChart(
                 "#" + chartId,
                 getDimension(schema, chart.dimension),
                 getGroup(schema, chart.dimension, chart.measure1, schema.metric),
-                getGroup(schema, chart.dimension, chart.measure2, schema.metric),
                 chart.axisValues,
                 chart.width,
                 chart.height,
@@ -199,7 +191,7 @@ function redrawExcept(chartNo) {
     // dc.renderAll();
 }
 
-function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w, h, gap, topn, chartNo) {
+function createSingleMeasureChart(targetDiv, dimension, group1, axisVals, w, h, gap, topn, chartNo) {
     var filteredGroup = (function (source_group) {
         return {
             all: function () {
@@ -209,21 +201,6 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
             }
         };
     })(group1);
-
-    //make sure second group follows first, not top 10 as it could be different
-    var filteredmeasure2 = (function (source_group) {
-        return {
-            all: function () {
-                return source_group.all().filter(function (d) {
-                    for (var i = 0; i < filteredGroup.all().length; i++) {
-                        if (filteredGroup.all()[i].key === d.key) {
-                            return d.key;
-                        }
-                    }
-                });
-            }
-        };
-    })(group2);
 
     var composite = dc.compositeChart(targetDiv);
     var clicked;
@@ -235,16 +212,9 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
             redrawExcept(chartNo);
         });
 
-    var c2 = dc.barChart(composite)
-        .gap(gap)
-        .centerBar(true)
-        .group(filteredmeasure2)
-        .colors('green');
-
     composite
         .width(w)
         .height(h)
-        ._rangeBandPadding(-0.5)
         .dimension(dimension);
 
     //months don't change for now to allow the ordering to work
@@ -257,7 +227,7 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
         composite.x(d3.scale.ordinal().domain(axisVals));
     }
 
-    composite.compose([c1, c2])
+    composite.compose([c1])
         .xUnits(dc.units.ordinal)
         .mouseZoomable(true)
         .on('postRedraw', function (chart) {
@@ -275,7 +245,6 @@ function createCompositeChart(targetDiv, dimension, group1, group2, axisVals, w,
 
     composite.renderlet(function (chart) {
         chart.selectAll("g._1").attr("transform", "translate(" + (22 + (gap - 30)) + ", 0)");
-        //d3.event.stopPropagation();
     });
 
     if (!axisVals) { //rotate non-month
