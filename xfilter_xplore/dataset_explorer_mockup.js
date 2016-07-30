@@ -17,7 +17,11 @@ var schema = {
             "width" : 600,
             "height": 240,
             "gap" : 30,
-            "topn" : 12
+            "topn" : 12,
+            "gsX" : 0,
+            "gxY" : 0,
+            "gsWidth" : 4,
+            "gsHeight" : 3
         },
         {
             "id" : "graph2",
@@ -28,8 +32,13 @@ var schema = {
             "width" : 726,
             "height": 240,
             "gap" : 30,
-            "topn" : 15
-        },
+            "topn" : 15,
+            "gsX" : 4,
+            "gxY" : 0,
+            "gsWidth" : 4,
+            "gsHeight" : 3
+        }
+        ,
         {
             "id" : "graph3",
             "name": "By Region",
@@ -39,30 +48,42 @@ var schema = {
             "width" : 930,
             "height": 240,
             "gap" : 26.5,
-            "topn" : 22
+            "topn" : 22,
+            "gsX" : 9,
+            "gxY" : 0,
+            "gsWidth" : 4,
+            "gsHeight" : 3
         },
-        {
-            "id" : "graph4",
-            "name": "By Customer Group",
-            "dimension" : "category",
-            "group1" : [ "category", "sales"],
-            "group2" : [ "category", "m_gm"],
-            "width" : 840,
-            "height": 240,
-            "gap" : 29,
-            "topn" : 18
-        },
-        {
-            "id" : "graph5",
-            "name": "By Product Category",
-            "dimension" : "region",
-            "group1" : [ "region", "sales"],
-            "group2" : [ "region", "m_gm"],
-            "width" : 410,
-            "height": 240,
-            "gap" : 30,
-            "topn" : 12
-        }
+        // {
+        //     "id" : "graph4",
+        //     "name": "By Customer Group",
+        //     "dimension" : "category",
+        //     "group1" : [ "category", "sales"],
+        //     "group2" : [ "category", "m_gm"],
+        //     "width" : 840,
+        //     "height": 240,
+        //     "gap" : 29,
+        //     "topn" : 18,
+        //     "gsX" : 0,
+        //     "gxY" : 4,
+        //     "gsWidth" : 6,
+        //     "gsHeight" : 3
+        // },
+        // {
+        //     "id" : "graph5",
+        //     "name": "By Product Category",
+        //     "dimension" : "region",
+        //     "group1" : [ "region", "sales"],
+        //     "group2" : [ "region", "m_gm"],
+        //     "width" : 410,
+        //     "height": 240,
+        //     "gap" : 30,
+        //     "topn" : 12,
+        //     "gsX" : 6,
+        //     "gxY" : 4,
+        //     "gsWidth" : 6,
+        //     "gsHeight" : 3
+        // }
     ]
 };
 
@@ -97,6 +118,15 @@ d3.csv('data/2014_SALES.csv', function (data) {
     var test = groups.m_month_sales.top(Infinity);
     var chartNumber = 0;
     schema.charts.forEach( function(chart) {
+
+        var template = cloneTemplate(
+            chart.gsX, chart.gsY,
+            chart.gsWidth, chart.gsHeight,
+            chart.name,
+            chart.id
+        );
+        $(".grid-stack").prepend( template );
+
         createCompositeChart(
             "#" + chart.id,
             dimensions["dim_" + chart.dimension],
@@ -230,4 +260,18 @@ function toggleGrid() {
         grid.style.display = 'block';
         gridvis = true;
     }
+}
+
+function cloneTemplate(gsX, gsY, gsWidth, gsHeight, title, id) {
+    var template = $(".grid-stack-item-template").clone()
+    template.removeClass("grid-stack-item-template");
+    template.attr("data-gs-x", gsX);
+    template.attr("data-gs-y", gsY);
+    template.attr("data-gs-width", gsWidth);
+    template.attr("data-gs-height", gsHeight);
+    template.find(".item-title").text(title);
+    template.find(".grid-stack-item-content .graphContent").attr("id", id);
+    template.addClass("grid-stack-item");
+
+    return template;
 }

@@ -26,6 +26,9 @@
         text-align: right; float: left; overflow: hidden; white-space: nowrap;  width: 38.5px; }
     .col-0 { width: 57px; }
   /*  .col-0.cell {padding-left: 10px;}*/
+    .grid-stack-item-template {
+        display: none;
+    }
 </style>
 
 <body style="background-color: whitesmoke;">
@@ -53,47 +56,56 @@
     </select>
 </div>
 
+<div class="grid-stack-item-template"
+     data-gs-x="0" data-gs-y="0"
+     data-gs-width="0" data-gs-height="0">
+    <div style="padding-left:  10px;" class="item-title">Graph title</div>
+    <div class="grid-stack-item-content" style="top:20px;">
+        <div class="graphContent"></div>
+    </div>
+</div>
+
 <!--1st row-->
 <div class="grid-stack" style="top: 10px; left: 10px;">
-    <div id="m"  class="grid-stack-item"
-         data-gs-x="0" data-gs-y="0"
-         data-gs-width="4" data-gs-height="3">
-        <div style="padding-left:  10px;" >By Month &nbsp; <button onclick="toggleGrid();"></button></div>
-        <div   class="grid-stack-item-content" style="top:20px;">
-            <div id="graph1" ></div>
-            <div id="test" style="display: none;"></div>
-        </div>
-    </div>
+    <!--<div id="m"  class="grid-stack-item"-->
+         <!--data-gs-x="0" data-gs-y="0"-->
+         <!--data-gs-width="4" data-gs-height="3">-->
+        <!--<div style="padding-left:  10px;" >By Month &nbsp; <button onclick="toggleGrid();"></button></div>-->
+        <!--<div   class="grid-stack-item-content" style="top:20px;">-->
+            <!--<div id="graph1" ></div>-->
+            <!--<div id="test" style="display: none;"></div>-->
+        <!--</div>-->
+    <!--</div>-->
 
-    <div  class="grid-stack-item"
-         data-gs-x="4" data-gs-y="0"
-         data-gs-width="4" data-gs-height="3">
-        <div style="padding-left:  10px;">By Salesperson</div>
-        <div id="graph2" class="grid-stack-item-content" style="top:20px;"></div>
-    </div>
+    <!--<div  class="grid-stack-item"-->
+         <!--data-gs-x="4" data-gs-y="0"-->
+         <!--data-gs-width="4" data-gs-height="3">-->
+        <!--<div style="padding-left:  10px;">By Salesperson</div>-->
+        <!--<div id="graph2" class="grid-stack-item-content" style="top:20px;"></div>-->
+    <!--</div>-->
 
-    <div  class="grid-stack-item"
-          data-gs-x="9" data-gs-y="0"
-          data-gs-width="4" data-gs-height="3">
-        <div style="padding-left:  10px;">By Region</div>
-        <div id="graph5" class="grid-stack-item-content" style="top:20px;"></div>
-    </div>
+    <!--<div  class="grid-stack-item"-->
+          <!--data-gs-x="9" data-gs-y="0"-->
+          <!--data-gs-width="4" data-gs-height="3">-->
+        <!--<div style="padding-left:  10px;">By Region</div>-->
+        <!--<div id="graph5" class="grid-stack-item-content" style="top:20px;"></div>-->
+    <!--</div>-->
 
-<!--    2nd row-->
+<!--&lt;!&ndash;    2nd row&ndash;&gt;-->
 
-    <div class="grid-stack-item"
-         data-gs-x="0" data-gs-y="4"
-         data-gs-width="6" data-gs-height="3">
-        <div style="padding-left:  10px;">By Customer Group</div>
-        <div id="graph3" class="grid-stack-item-content" style="top:20px;"></div>
-    </div>
+    <!--<div class="grid-stack-item"-->
+         <!--data-gs-x="0" data-gs-y="4"-->
+         <!--data-gs-width="6" data-gs-height="3">-->
+        <!--<div style="padding-left:  10px;">By Customer Group</div>-->
+        <!--<div id="graph3" class="grid-stack-item-content" style="top:20px;"></div>-->
+    <!--</div>-->
 
-    <div  class="grid-stack-item"
-         data-gs-x="6" data-gs-y="4"
-         data-gs-width="6" data-gs-height="3">
-        <div style="padding-left:  10px;">By Product Category</div>
-        <div id="graph4" class="grid-stack-item-content" style="top:20px;"></div>
-    </div>
+    <!--<div  class="grid-stack-item"-->
+         <!--data-gs-x="6" data-gs-y="4"-->
+         <!--data-gs-width="6" data-gs-height="3">-->
+        <!--<div style="padding-left:  10px;">By Product Category</div>-->
+        <!--<div id="graph4" class="grid-stack-item-content" style="top:20px;"></div>-->
+    <!--</div>-->
 
 </div>
 
@@ -123,7 +135,9 @@
             cell_height: 80,
             vertical_margin: 10
         };
-        $('.grid-stack').gridstack(options);
+        setTimeout( function() {
+            $('.grid-stack').gridstack(options);
+        }, 1000)
     });
 </script>
 
