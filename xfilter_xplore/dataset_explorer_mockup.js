@@ -8,7 +8,6 @@ var schema = {
     "metric": "m_sales",
     "charts": [
         {
-            "id" : "graph1",
             "name": "By Month",
             "dimension" : "month",
             "group1" : [ "month", "sales"],
@@ -24,7 +23,6 @@ var schema = {
             "gsHeight" : 3
         },
         {
-            "id" : "graph2",
             "name": "By Salesperson",
             "dimension" : "customer",
             "group1" : [ "salesperson", "sales"],
@@ -37,10 +35,8 @@ var schema = {
             "gxY" : 0,
             "gsWidth" : 4,
             "gsHeight" : 3
-        }
-        ,
+        },
         {
-            "id" : "graph3",
             "name": "By Region",
             "dimension" : "customer",
             "group1" : [ "customer", "sales"],
@@ -55,7 +51,6 @@ var schema = {
             "gsHeight" : 3
         },
         {
-            "id" : "graph4",
             "name": "By Customer Group",
             "dimension" : "category",
             "group1" : [ "category", "sales"],
@@ -66,32 +61,28 @@ var schema = {
             "topn" : 18,
             "gsX" : 0,
             "gxY" : 4,
-            "gsWidth" : 6,
+            "gsWidth" : 4,
             "gsHeight" : 3
         }
-        // ,
-        // {
-        //     "id" : "graph5",
-        //     "name": "By Product Category",
-        //     "dimension" : "region",
-        //     "group1" : [ "region", "sales"],
-        //     "group2" : [ "region", "m_gm"],
-        //     "width" : 410,
-        //     "height": 240,
-        //     "gap" : 30,
-        //     "topn" : 12,
-        //     "gsX" : 6,
-        //     "gxY" : 4,
-        //     "gsWidth" : 6,
-        //     "gsHeight" : 3
-        // }
+        ,
+        {
+            "name": "By Product Category",
+            "dimension" : "region",
+            "group1" : [ "region", "sales"],
+            "group2" : [ "region", "m_gm"],
+            "width" : 410,
+            "height": 240,
+            "gap" : 30,
+            "topn" : 12,
+            "gsX" : 4,
+            "gxY" : 4,
+            "gsWidth" : 4,
+            "gsHeight" : 3
+        }
     ]
 };
 
 d3.csv('data/2014_SALES.csv', function (data) {
-    /* since its a csv file we need to format the data a bit */
-    //### Create Crossfilter Dimensions and Groups
-    //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
     var ndx2 = crossfilter(data);
 
     // define dimensions and groups from schema and data
@@ -119,17 +110,18 @@ d3.csv('data/2014_SALES.csv', function (data) {
     var test = groups.m_month_sales.top(Infinity);
     var chartNumber = 0;
     schema.charts.forEach( function(chart) {
+        var chartId = "graph" + ++chartNumber;
 
         var template = cloneTemplate(
             chart.gsX, chart.gsY,
             chart.gsWidth, chart.gsHeight,
             chart.name,
-            chart.id
+            chartId
         );
         $(".grid-stack").prepend( template );
 
         createCompositeChart(
-            "#" + chart.id,
+            "#" + chartId,
             dimensions["dim_" + chart.dimension],
             groups[ "m_" + chart.group1[0] + "_" + chart.group1[1] ],
             groups[ "m_" + chart.group2[0] + "_" + chart.group2[1] ],
@@ -138,7 +130,7 @@ d3.csv('data/2014_SALES.csv', function (data) {
             chart.height,
             chart.gap,
             chart.topn,
-            ++chartNumber
+            chartNumber
         );
     });
 

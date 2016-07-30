@@ -34,6 +34,7 @@
 <body style="background-color: whitesmoke;">
 <div style=" height: 50px; padding-left: 10px; padding-top: 10px; background-color: black; color: white" ><H5> Example - Whyte's Sales Analysis</H5></div>
 
+<!--header -->
 <div style=" background-color: lightblue; padding-left: 10px;  padding-top: 2px; padding-bottom: 2px; top: 10px; left: 10px;" > Division:
     <select style=" vertical-align: top;">
     <option value="RT">RT</option>
@@ -56,6 +57,7 @@
     </select>
 </div>
 
+<!--grid item template -->
 <div class="grid-stack-item-template"
      data-gs-x="0" data-gs-y="0"
      data-gs-width="0" data-gs-height="0">
@@ -65,48 +67,8 @@
     </div>
 </div>
 
-<!--1st row-->
+<!--grid items DOM target-->
 <div class="grid-stack" style="top: 10px; left: 10px;">
-    <!--<div id="m"  class="grid-stack-item"-->
-         <!--data-gs-x="0" data-gs-y="0"-->
-         <!--data-gs-width="4" data-gs-height="3">-->
-        <!--<div style="padding-left:  10px;" >By Month &nbsp; <button onclick="toggleGrid();"></button></div>-->
-        <!--<div   class="grid-stack-item-content" style="top:20px;">-->
-            <!--<div id="graph1" ></div>-->
-            <!--<div id="test" style="display: none;"></div>-->
-        <!--</div>-->
-    <!--</div>-->
-
-    <!--<div  class="grid-stack-item"-->
-         <!--data-gs-x="4" data-gs-y="0"-->
-         <!--data-gs-width="4" data-gs-height="3">-->
-        <!--<div style="padding-left:  10px;">By Salesperson</div>-->
-        <!--<div id="graph2" class="grid-stack-item-content" style="top:20px;"></div>-->
-    <!--</div>-->
-
-    <!--<div  class="grid-stack-item"-->
-          <!--data-gs-x="9" data-gs-y="0"-->
-          <!--data-gs-width="4" data-gs-height="3">-->
-        <!--<div style="padding-left:  10px;">By Region</div>-->
-        <!--<div id="graph5" class="grid-stack-item-content" style="top:20px;"></div>-->
-    <!--</div>-->
-
-<!--&lt;!&ndash;    2nd row&ndash;&gt;-->
-
-    <!--<div class="grid-stack-item"-->
-         <!--data-gs-x="0" data-gs-y="4"-->
-         <!--data-gs-width="6" data-gs-height="3">-->
-        <!--<div style="padding-left:  10px;">By Customer Group</div>-->
-        <!--<div id="graph3" class="grid-stack-item-content" style="top:20px;"></div>-->
-    <!--</div>-->
-
-    <!--<div  class="grid-stack-item"-->
-         <!--data-gs-x="6" data-gs-y="4"-->
-         <!--data-gs-width="6" data-gs-height="3">-->
-        <!--<div style="padding-left:  10px;">By Product Category</div>-->
-        <!--<div id="graph4" class="grid-stack-item-content" style="top:20px;"></div>-->
-    <!--</div>-->
-
 </div>
 
 
@@ -137,7 +99,7 @@
         };
         setTimeout( function() {
             $('.grid-stack').gridstack(options);
-        }, 100)
+        }, 500)
     });
 </script>
 
