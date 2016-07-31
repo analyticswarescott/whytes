@@ -19,6 +19,7 @@ var schema_whytes = {
         {
             "name": "By Month",
             "dimension" : "month",
+            "dimensionSorted" : true,
             "axisValues" : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             "width" : 600,
             "height": 240,
@@ -113,6 +114,7 @@ var schema_cordova = {
         {
             "name": "By Game Day",
             "dimension" : "game_day",
+            "dimensionSorted" : true,
             "width" : 930,
             "height": 240,
             "gap" : 26.5,
@@ -218,6 +220,7 @@ function setupGraphs(schema, measure) {
             createSingleMeasureChart(
                 "#" + chartId,
                 getDimension(schema, chart.dimension),
+                chart.dimensionSorted,
                 getGroup(schema, chart.dimension, measure),
                 chart.axisValues,
                 chart.width,
@@ -242,7 +245,7 @@ function redrawExcept(chartNo) {
     // dc.renderAll();
 }
 
-function createSingleMeasureChart(targetDiv, dimension, group1, axisVals, w, h, gap, topn, chartNo) {
+function createSingleMeasureChart(targetDiv, dimension, dimensionSorted, group1, axisVals, w, h, gap, topn, chartNo) {
     var filteredGroup = (function (source_group) {
         return {
             all: function () {
@@ -270,9 +273,14 @@ function createSingleMeasureChart(targetDiv, dimension, group1, axisVals, w, h, 
 
     //months don't change for now to allow the ordering to work
     if (!axisVals) {
-        composite.x(d3.scale.ordinal().domain(filteredGroup.all().map(function (d) {
+        var all = filteredGroup.all();
+        var m = all.map(function (d) {
             return d.key;
-        })))
+        });
+        if ( dimensionSorted ) {
+            m.sort();
+        }
+        composite.x(d3.scale.ordinal().domain(m));
     }
     else {
         composite.x(d3.scale.ordinal().domain(axisVals));
