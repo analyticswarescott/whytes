@@ -4,111 +4,51 @@
     <title>AnalyticsWare -- NexGen Data Exploration</title>
 
     <meta charset="UTF-8">
-
     <link rel="stylesheet" type="text/css" href="css/dc.css"/>
+    <link rel="stylesheet" type="text/css" href="css/dataset_explorer.css"/>
     <link rel="icon" type="image/x-icon" href="dc.logo.png"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/gridstack.css"/>
 
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="./js/jquery-ui.js"></script>
+    <script src="./js/lodash_min.js"></script>
+    <script src="./js/gridstack.js"></script>
+
+    <script type="text/javascript" src="js/d3.js"></script>
+    <script type="text/javascript" src="js/d3grid.js"></script>
+    <script type="text/javascript" src="js/crosstest.js"></script>
+    <script type="text/javascript" src="js/dc.js"></script>
+    <script type="text/javascript" src="js/colorbrewer.js"></script>
+    <script type="text/javascript" src="dataset_explorer_mockup.js"></script>
 </head>
 
-<style type="text/css">
-    html, body {
-        background: #f7f7f7;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        color: #111;
-        font-family: Ubuntu, Helvetica, sans-serif;
-        line-height: 1.35em;
-    }
-
-    a {
-        color: #6be;
-        text-decoration: none;
-    }
-
-    .row, .header, .cell {
-        height: 18px;
-    }
-
-    .row, .header {
-        clear: left;
-    }
-
-    .data {
-        position: relative;
-        left: 15px;
-    }
-
-    .header {
-        font-weight: bold;
-        height: 0px;
-    }
-
-    .cell {
-        border: solid;
-        border-width: 1px;
-        font-size: 10px;
-        padding-right: 2px;
-        text-align: right;
-        float: left;
-        overflow: hidden;
-        white-space: nowrap;
-        width: 38.5px;
-    }
-
-    .col-0 {
-        width: 57px;
-    }
-
-    /*  .col-0.cell {padding-left: 10px;}*/
-    .grid-stack-item-template {
-        display: none;
-    }
-</style>
-
 <body style="background-color: whitesmoke;">
-<div style=" height: 50px; padding-left: 10px; padding-top: 10px; background-color: black; color: white"><H5
-        class="title"></H5></div>
-
-
-<!--header -->
-<div style=" background-color: lightblue; padding-left: 10px;  padding-top: 2px; padding-bottom: 2px; top: 10px; left: 10px;">
-    Measure:
-    <select style=" vertical-align: top;" class="measures">
-    </select>
-</div>
-
-<!--grid item template -->
-<div class="grid-stack-item-template"
-     data-gs-x="0" data-gs-y="0"
-     data-gs-width="0" data-gs-height="0">
-    <div style="padding-left:  10px;" class="item-title">Graph title</div>
-    <div class="grid-stack-item-content" style="top:20px;">
-        <div class="graphContent"></div>
+    <div style=" height: 50px; padding-left: 10px; padding-top: 10px; background-color: black; color: white"><H5
+            class="title"></H5>
     </div>
-</div>
 
-<div class="grid-stack-template" style="top: 10px; left: 10px;">
-</div>
+    <!--header -->
+    <div style=" background-color: lightblue; padding-left: 10px;  padding-top: 2px; padding-bottom: 2px; top: 10px; left: 10px;">
+        Measure:
+        <select style=" vertical-align: top;" class="measures">
+        </select>
+    </div>
 
+    <!--grid item template -->
+    <div class="grid-stack-item-template"
+         data-gs-x="0" data-gs-y="0"
+         data-gs-width="0" data-gs-height="0">
+        <div style="padding-left:  10px;" class="item-title">Graph title</div>
+        <div class="grid-stack-item-content" style="top:20px;">
+            <div class="graphContent"></div>
+        </div>
+    </div>
+
+    <div class="grid-stack-template" style="top: 10px; left: 10px;">
+    </div>
 </body>
-
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="./css/gridstack.css"/>
-
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"
-        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-<script src="./js/jquery-ui.js"></script>
-<script src="./js/lodash_min.js"></script>
-<script src="./js/gridstack.js"></script>
-
-<script type="text/javascript" src="js/d3.js"></script>
-<script type="text/javascript" src="js/d3grid.js"></script>
-<script type="text/javascript" src="js/crosstest.js"></script>
-<script type="text/javascript" src="js/dc.js"></script>
-<script type="text/javascript" src="js/colorbrewer.js"></script>
-<script type="text/javascript" src="dataset_explorer_mockup.js"></script>
-
 
 <script type="text/javascript">
     $(document).ready(function () {

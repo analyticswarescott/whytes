@@ -1,0 +1,53 @@
+html, body {
+    background: #f7f7f7;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    color: #111;
+    font-family: Ubuntu, Helvetica, sans-serif;
+    line-height: 1.35em;
+}
+
+a {
+    color: #6be;
+    text-decoration: none;
+}
+
+.row, .header, .cell {
+    height: 18px;
+}
+
+.row, .header {
+    clear: left;
+}
+
+.data {
+    position: relative;
+    left: 15px;
+}
+
+.header {
+    font-weight: bold;
+    height: 0px;
+}
+
+.cell {
+    border: solid;
+    border-width: 1px;
+    font-size: 10px;
+    padding-right: 2px;
+    text-align: right;
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 38.5px;
+}
+
+.col-0 {
+    width: 57px;
+}
+
+/*  .col-0.cell {padding-left: 10px;}*/
+.grid-stack-item-template {
+    display: none;
+}
