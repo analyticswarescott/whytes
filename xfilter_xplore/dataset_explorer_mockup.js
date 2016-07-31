@@ -4,7 +4,7 @@
 // todo move this to a resource file under data
 var schema_whytes = {
     "title": "Whytes",
-    "source": "data/2014_SALES.csv",
+    "source": "data/whytes/2014_SALES.csv",
     "measures": [
         {
             "id": "m_sales",
@@ -71,7 +71,7 @@ var schema_whytes = {
 
 var schema_cordova = {
     "title": "Cordova",
-    "source": "data/cordova_dealer_ds/data-table.csv",
+    "source": "data/cordova/data-table.csv",
     "measures" : [
         {
             "id": "dealer_error_count",
