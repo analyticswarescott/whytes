@@ -13,6 +13,14 @@
     {
       "id": "fees_collected",
       "name" : "Feeds Collected"
+    },
+    {
+      "id": "commision_error_count",
+      "name" : "Comission Error Count"
+    },
+    {
+      "id": "action_minutes",
+      "name" : "Action Count"
     }
   ],
   "charts": [
