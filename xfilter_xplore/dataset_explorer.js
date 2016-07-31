@@ -1,132 +1,6 @@
 //# dc.js Getting Started and How-To Guide
 'use strict';
 
-// todo move this to a resource file under data
-var schema_whytes = {
-    "title": "Whytes",
-    "source": "data/whytes/2014_SALES.csv",
-    "measures": [
-        {
-            "id": "m_sales",
-            "name" : "Gross Sales"
-        },
-        {
-            "id": "m_gm",
-            "name" : "Gross Margin"
-        }
-    ],
-    "charts": [
-        {
-            "name": "By Month",
-            "dimension" : "month",
-            "dimensionSorted" : true,
-            "axisValues" : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            "width" : 600,
-            "height": 240,
-            "gap" : 30,
-            "topn" : 12,
-            "gsX" : 0,
-            "gxY" : 0,
-            "gsWidth" : 4,
-            "gsHeight" : 3
-        },
-        {
-            "name": "By Salesperson",
-            "dimension" : "salesperson",
-            "width" : 726,
-            "height": 240,
-            "gap" : 30,
-            "topn" : 15,
-            "gsX" : 4,
-            "gxY" : 0,
-            "gsWidth" : 4,
-            "gsHeight" : 3
-        },
-        {
-            "name": "By Region",
-            "dimension" : "region",
-            "width" : 930,
-            "height": 240,
-            "gap" : 26.5,
-            "topn" : 22,
-            "gsX" : 9,
-            "gxY" : 0,
-            "gsWidth" : 4,
-            "gsHeight" : 3
-        },
-        {
-            "name": "By Customer Group",
-            "dimension" : "customer",
-            "width" : 840,
-            "height": 240,
-            "gap" : 29,
-            "topn" : 18,
-            "gsX" : 0,
-            "gxY" : 4,
-            "gsWidth" : 4,
-            "gsHeight" : 3
-        }
-    ]
-};
-
-var schema_cordova = {
-    "title": "Cordova",
-    "source": "data/cordova/data-table.csv",
-    "measures" : [
-        {
-            "id": "dealer_error_count",
-            "name" : "Dealer Error Count"
-        },
-        {
-            "id": "number_of_rounds",
-            "name" : "Number of Rounds"
-        },
-        {
-            "id": "fees_collected",
-            "name" : "Feeds Collected"
-        },
-    ],
-    "charts": [
-        {
-            "name": "By Dealer",
-            "dimension" : "dealer",
-            "width" : 600,
-            "height": 240,
-            "gap" : 30,
-            "topn" : 12,
-            "gsX" : 0,
-            "gxY" : 4,
-            "gsWidth" : 6,
-            "gsHeight" : 3
-        },
-        {
-            "name": "By Table Name",
-            "dimension" : "table_name",
-            "width" : 500,
-            "height": 240,
-            "gap" : 30,
-            "topn" : 15,
-            "gsX" : 6,
-            "gxY" : 4,
-            "gsWidth" : 6,
-            "gsHeight" : 3
-        },
-        {
-            "name": "By Game Day",
-            "dimension" : "game_day",
-            "dimensionSorted" : true,
-            "width" : 930,
-            "height": 240,
-            "gap" : 26.5,
-            "topn" : 22,
-            "gsX" : 0,
-            "gxY" : 0,
-            "gsWidth" : 9,
-            "gsHeight" : 3
-        }
-    ]
-};
-
 var dimensions = {};
 var groups = {};
 var ndx2;
@@ -171,25 +45,27 @@ function getGroup(schema, dimensionColumn, measureColumn) {
     return group;
 }
 
-function setup(schema) {
-    // setup title
-    $(".title").text(schema.title)
+function setup(schemaName) {
+    $.get("data/" + schemaName + "/schema.json", function(schema) {
+        // setup title
+        $(".title").text(schema.title)
 
-    // setup measures
-    var measuresDOM = $(".measures");
-    measuresDOM.empty();
-    schema.measures.forEach( function(measure) {
-        var option = $("<option/>");
-        option.attr("value", measure.id);
-        option.text(measure.name)
-        $(".measures").append(option);
+        // setup measures
+        var measuresDOM = $(".measures");
+        measuresDOM.empty();
+        schema.measures.forEach( function(measure) {
+            var option = $("<option/>");
+            option.attr("value", measure.id);
+            option.text(measure.name)
+            $(".measures").append(option);
+        });
+
+        measuresDOM.change(function(evt) {
+            setupGraphs(schema, $(evt.target).val());
+        });
+
+        setupGraphs(schema, schema.measures[0].id);
     });
-
-    measuresDOM.change(function(evt) {
-        setupGraphs(schema, $(evt.target).val());
-    });
-
-    setupGraphs(schema, schema.measures[0].id);
 }
 
 function setupGraphs(schema, measure) {
@@ -315,28 +191,6 @@ function createSingleMeasureChart(targetDiv, dimension, dimensionSorted, group1,
     }
 
     return composite;
-}
-
-function createDataGrid(targetDiv, dimension, group) {
-    var grid = d3.divgrid();
-    d3.csv('data/month_pivot.csv', function (data) {
-        d3.select(targetDiv)
-            .datum(data)
-            .call(grid)
-    });
-}
-
-var gridvis = false;
-function toggleGrid() {
-    var grid = document.getElementById('test');
-    if (gridvis) {
-        grid.style.display = 'none';
-        gridvis = false
-    }
-    else {
-        grid.style.display = 'block';
-        gridvis = true;
-    }
 }
 
 function cloneTemplate(gsX, gsY, gsWidth, gsHeight, title, id) {

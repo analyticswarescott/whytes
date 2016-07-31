@@ -1,0 +1,66 @@
+{
+  "title": "Whytes",
+  "source": "data/whytes/2014_SALES.csv",
+  "measures": [
+    {
+      "id": "m_sales",
+      "name" : "Gross Sales"
+    },
+    {
+      "id": "m_gm",
+      "name" : "Gross Margin"
+    }
+  ],
+  "charts": [
+    {
+      "name": "By Month",
+      "dimension" : "month",
+      "dimensionSorted" : true,
+      "axisValues" : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      "width" : 600,
+      "height": 240,
+      "gap" : 30,
+      "topn" : 12,
+      "gsX" : 0,
+      "gxY" : 0,
+      "gsWidth" : 4,
+      "gsHeight" : 3
+    },
+    {
+      "name": "By Salesperson",
+      "dimension" : "salesperson",
+      "width" : 726,
+      "height": 240,
+      "gap" : 30,
+      "topn" : 15,
+      "gsX" : 4,
+      "gxY" : 0,
+      "gsWidth" : 4,
+      "gsHeight" : 3
+    },
+    {
+      "name": "By Region",
+      "dimension" : "region",
+      "width" : 930,
+      "height": 240,
+      "gap" : 26.5,
+      "topn" : 22,
+      "gsX" : 9,
+      "gxY" : 0,
+      "gsWidth" : 4,
+      "gsHeight" : 3
+    },
+    {
+      "name": "By Customer Group",
+      "dimension" : "customer",
+      "width" : 840,
+      "height": 240,
+      "gap" : 29,
+      "topn" : 18,
+      "gsX" : 0,
+      "gxY" : 4,
+      "gsWidth" : 4,
+      "gsHeight" : 3
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "title": "Cordova",
+  "source": "data/cordova/data-table.csv",
+  "measures" : [
+    {
+      "id": "dealer_error_count",
+      "name" : "Dealer Error Count"
+    },
+    {
+      "id": "number_of_rounds",
+      "name" : "Number of Rounds"
+    },
+    {
+      "id": "fees_collected",
+      "name" : "Feeds Collected"
+    }
+  ],
+  "charts": [
+    {
+      "name": "By Dealer",
+      "dimension" : "dealer",
+      "width" : 600,
+      "height": 240,
+      "gap" : 30,
+      "topn" : 12,
+      "gsX" : 0,
+      "gxY" : 4,
+      "gsWidth" : 6,
+      "gsHeight" : 3
+    },
+    {
+      "name": "By Table Name",
+      "dimension" : "table_name",
+      "width" : 500,
+      "height": 240,
+      "gap" : 30,
+      "topn" : 15,
+      "gsX" : 6,
+      "gxY" : 4,
+      "gsWidth" : 6,
+      "gsHeight" : 3
+    },
+    {
+      "name": "By Game Day",
+      "dimension" : "game_day",
+      "dimensionSorted" : true,
+      "width" : 930,
+      "height": 240,
+      "gap" : 26.5,
+      "topn" : 22,
+      "gsX" : 0,
+      "gxY" : 0,
+      "gsWidth" : 9,
+      "gsHeight" : 3
+    }
+  ]
+}
