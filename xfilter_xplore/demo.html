@@ -52,7 +52,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        setup("cordova");
+        var dataset = queryParamValue("dataset")
+        setup(dataset || "cordova");
     });
 </script>
 
