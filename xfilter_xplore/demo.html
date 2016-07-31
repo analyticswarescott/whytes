@@ -88,8 +88,7 @@
     </div>
 </div>
 
-<!--grid items DOM target-->
-<div class="grid-stack" style="top: 10px; left: 10px;">
+<div class="grid-stack-template" style="top: 10px; left: 10px;">
 </div>
 
 </body>
@@ -112,17 +111,8 @@
 
 
 <script type="text/javascript">
-    $(function () {
-        var options = {
-            alwaysShowResizeHandle: true,
-            cell_height: 80,
-            vertical_margin: 10
-        };
-
-        setupGraphs(schema_cordova);
-        setTimeout(function () {
-            $('.grid-stack').gridstack(options);
-        }, 500)
+    $(document).ready(function () {
+        setup(schema_cordova);
     });
 </script>
 

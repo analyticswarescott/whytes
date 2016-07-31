@@ -19,7 +19,6 @@ var schema_whytes = {
         {
             "name": "By Month",
             "dimension" : "month",
-            "measure1" : "m_sales",
             "axisValues" : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             "width" : 600,
             "height": 240,
@@ -33,7 +32,6 @@ var schema_whytes = {
         {
             "name": "By Salesperson",
             "dimension" : "salesperson",
-            "measure1" : "m_sales",
             "width" : 726,
             "height": 240,
             "gap" : 30,
@@ -46,7 +44,6 @@ var schema_whytes = {
         {
             "name": "By Region",
             "dimension" : "region",
-            "measure1" : "m_sales",
             "width" : 930,
             "height": 240,
             "gap" : 26.5,
@@ -59,7 +56,6 @@ var schema_whytes = {
         {
             "name": "By Customer Group",
             "dimension" : "customer",
-            "measure1" : "m_sales",
             "width" : 840,
             "height": 240,
             "gap" : 29,
@@ -77,6 +73,10 @@ var schema_cordova = {
     "source": "data/cordova_dealer_ds/data-table.csv",
     "measures" : [
         {
+            "id": "dealer_error_count",
+            "name" : "Dealer Error Count"
+        },
+        {
             "id": "number_of_rounds",
             "name" : "Number of Rounds"
         },
@@ -84,16 +84,11 @@ var schema_cordova = {
             "id": "fees_collected",
             "name" : "Feeds Collected"
         },
-        {
-            "id": "dealer_error_count",
-            "name" : "Dealer Error Count"
-        }
     ],
     "charts": [
         {
             "name": "By Dealer",
             "dimension" : "dealer",
-            "measure1" : "dealer_error_count",
             "width" : 600,
             "height": 240,
             "gap" : 30,
@@ -106,7 +101,6 @@ var schema_cordova = {
         {
             "name": "By Table Name",
             "dimension" : "table_name",
-            "measure1" : "dealer_error_count",
             "width" : 500,
             "height": 240,
             "gap" : 30,
@@ -119,7 +113,6 @@ var schema_cordova = {
         {
             "name": "By Game Day",
             "dimension" : "game_day",
-            "measure1" : "dealer_error_count",
             "width" : 930,
             "height": 240,
             "gap" : 26.5,
@@ -150,13 +143,13 @@ function getDimension(schema, column) {
     return dimension;
 }
 
-function getGroup(schema, dimensionColumn, measureColumn, metric) {
+function getGroup(schema, dimensionColumn, measureColumn) {
     var dimension = getDimension(schema, dimensionColumn);
     if ( !dimension ) {
         return;
     }
 
-    var groupName = "m_" + dimensionColumn + "_" + measureColumn + "_" + metric;
+    var groupName = "m_" + dimensionColumn + "_" + measureColumn;
     var group = groups[groupName];
     if ( group ) {
         return group;
@@ -176,7 +169,38 @@ function getGroup(schema, dimensionColumn, measureColumn, metric) {
     return group;
 }
 
-function setupGraphs(schema) {
+function setup(schema) {
+    // setup title
+    $(".title").text(schema.title)
+
+    // setup measures
+    var measuresDOM = $(".measures");
+    measuresDOM.empty();
+    schema.measures.forEach( function(measure) {
+        var option = $("<option/>");
+        option.attr("value", measure.id);
+        option.text(measure.name)
+        $(".measures").append(option);
+    });
+
+    measuresDOM.change(function(evt) {
+        setupGraphs(schema, $(evt.target).val());
+    });
+
+    setupGraphs(schema, schema.measures[0].id);
+}
+
+function setupGraphs(schema, measure) {
+    dimensions = {};
+    groups = {};
+
+    // init grid stack item target area
+    $(".grid-stack").remove();
+    var gridStackDOM = $(".grid-stack-template").clone();
+    gridStackDOM.removeClass("grid-stack-template");
+    gridStackDOM.addClass("grid-stack");
+    $("body").append(gridStackDOM);
+
     d3.csv(schema.source, function (data) {
         ndx2 = crossfilter(data);
         // plot charts
@@ -189,12 +213,12 @@ function setupGraphs(schema) {
                 chart.gsWidth, chart.gsHeight,
                 chart.name, chartId);
 
-            $(".grid-stack").prepend( template );
+            gridStackDOM.prepend( template );
 
             createSingleMeasureChart(
                 "#" + chartId,
                 getDimension(schema, chart.dimension),
-                getGroup(schema, chart.dimension, chart.measure1, schema.metric),
+                getGroup(schema, chart.dimension, measure),
                 chart.axisValues,
                 chart.width,
                 chart.height,
@@ -205,20 +229,14 @@ function setupGraphs(schema) {
         });
 
         dc.renderAll();
+
+        gridStackDOM.gridstack( {
+            alwaysShowResizeHandle: true,
+            cell_height: 80,
+            vertical_margin: 10
+        });
     });
-
-    // setup title
-    $(".title").text(schema.title)
-
-    // setup measures
-    schema.measures.forEach( function(measure) {
-        var option = $("<option/>");
-        option.attr("value", measure.id);
-        option.text(measure.name)
-        $(".measures").append(option);
-    })
 }
-
 
 function redrawExcept(chartNo) {
     // dc.renderAll();
